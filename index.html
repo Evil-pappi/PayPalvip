@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in to your PayPal account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+    body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        background-color: #f5f7fa;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-container {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        position: relative;
+        min-height: 500px;
+    }
+
+    .logo-container {
+        width: 100px;
+        height: 40px;
+        margin: 0 auto 30px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .paypal-logo {
+        font-family: Verdana, sans-serif;
+        font-size: 28px;
+        font-weight: bold;
+        color: #003087;
+        letter-spacing: -2px;
+    }
+
+    .paypal-p {
+        color: #009cde;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #c7d2e7;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+        background-color: white;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #0070ba;
+        box-shadow: 0 0 0 2px rgba(0, 112, 186, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: #9ca3af;
+    }
+
+    .form-input.error {
+        border-color: #d93f00;
+    }
+
+    .error-message {
+        color: #d93f00;
+        font-size: 13px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        text-align: left;
+        display: none;
+        font-weight: 400;
+        background: transparent;
+        padding: 0;
+    }
+
+    .success-message {
+        color: #008000;
+        font-size: 14px;
+        margin-top: 8px;
+        text-align: center;
+        display: none;
+    }
+
+    .forgot-password {
+        color: #0070ba;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .forgot-password:hover {
+        text-decoration: underline;
+    }
+
+    .login-btn {
+        width: 100%;
+        background: #0070ba;
+        color: white;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 24px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: background-color 0.3s;
+    }
+
+    .login-btn:hover {
+        background: #005ea6;
+    }
+
+    .login-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    .signup-btn {
+        width: 100%;
+        background: white;
+        color: #0070ba;
+        border: 1px solid #0070ba;
+        padding: 12px 16px;
+        border-radius: 24px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .signup-btn:hover {
+        background: #f8f9fa;
+    }
+
+    .footer {
+        margin-top: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .flag {
+        width: 20px;
+        height: 14px;
+        background: linear-gradient(to bottom, #b22234 0%, #b22234 7.69%, #ffffff 7.69%, #ffffff 15.38%, #b22234 15.38%, #b22234 23.08%, #ffffff 23.08%, #ffffff 30.77%, #b22234 30.77%, #b22234 38.46%, #ffffff 38.46%, #ffffff 46.15%, #b22234 46.15%, #b22234 53.85%, #ffffff 53.85%, #ffffff 61.54%, #b22234 61.54%, #b22234 69.23%, #ffffff 69.23%, #ffffff 76.92%, #b22234 76.92%, #b22234 84.62%, #ffffff 84.62%, #ffffff 92.31%, #b22234 92.31%, #b22234 100%);
+        position: relative;
+        cursor: pointer;
+    }
+
+    .flag::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40%;
+        height: 53.85%;
+        background: #3c3b6e;
+    }
+
+    .language-links a {
+        color: #6b7280;
+        text-decoration: none;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .language-links a:hover {
+        text-decoration: underline;
+    }
+
+    .language-links .active {
+        font-weight: bold;
+        color: #0070ba;
+    }
+
+    .loading {
+        display: none;
+    }
+
+    .loading.show {
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    /* Login form - initially visible */
+    .login-form {
+        display: block;
+    }
+
+    .login-form.hidden {
+        display: none;
+    }
+
+    /* Verification screen styles - initially hidden */
+    .verification-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        padding: 40px;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        border-radius: 8px;
+    }
+
+    .verification-screen.show {
+        display: flex;
+    }
+
+    .verification-icon {
+        width: 60px;
+        height: 60px;
+        background-color: #0070ba;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .verification-title {
+        font-size: 22px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        color: #003087;
+    }
+
+    .verification-description {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #6b7280;
+        line-height: 1.5;
+    }
+
+    .code-inputs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        justify-content: center;
+    }
+
+    .code-input {
+        width: 40px;
+        height: 50px;
+        text-align: center;
+        font-size: 20px;
+        border: 1px solid #c7d2e7;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+
+    .code-input:focus {
+        outline: none;
+        border-color: #0070ba;
+        box-shadow: 0 0 0 2px rgba(0, 112, 186, 0.1);
+    }
+
+    .verify-btn {
+        width: 100%;
+        background: #0070ba;
+        color: white;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 24px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: background-color 0.3s;
+    }
+
+    .verify-btn:hover {
+        background: #005ea6;
+    }
+
+    .back-to-login {
+        color: #0070ba;
+        text-decoration: none;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .back-to-login:hover {
+        text-decoration: underline;
+    }
+
+    /* Translations */
+    [data-lang="en"] .lang-en { display: inline; }
+    [data-lang="en"] .lang-fr,
+    [data-lang="en"] .lang-es,
+    [data-lang="en"] .lang-zh { display: none; }
+
+    [data-lang="fr"] .lang-fr { display: inline; }
+    [data-lang="fr"] .lang-en,
+    [data-lang="fr"] .lang-es,
+    [data-lang="fr"] .lang-zh { display: none; }
+
+    [data-lang="es"] .lang-es { display: inline; }
+    [data-lang="es"] .lang-en,
+    [data-lang="es"] .lang-fr,
+    [data-lang="es"] .lang-zh { display: none; }
+
+    [data-lang="zh"] .lang-zh { display: inline; }
+    [data-lang="zh"] .lang-en,
+    [data-lang="zh"] .lang-fr,
+    [data-lang="zh"] .lang-es { display: none; }
+</style>
+
+
+</head>
+<body data-lang="en">
+    <div class="login-container">
+        <!-- PayPal Logo -->
+        <div class="logo-container">
+            <div class="paypal-logo">
+                <span class="paypal-p">P</span>ayPal
+            </div>
+        </div>
+
+
+    <!-- Login Form -->
+    <div class="login-form" id="loginFormContainer">
+        <form id="loginForm">
+            <!-- EMAIL INPUT BOX -->
+            <div class="form-group">
+                <input type="email" id="email" class="form-input" placeholder="Email or mobile number" required>
+            </div>
+
+            <!-- ERROR MESSAGE OUTSIDE AND BELOW EMAIL BOX -->
+            <div class="error-message" id="email-error">
+                <span class="lang-en">Enter mobile number or email</span>
+                <span class="lang-fr">Entrez le numéro de mobile ou l'e-mail</span>
+                <span class="lang-es">Ingrese número móvil o correo</span>
+                <span class="lang-zh">输入手机号码或电子邮件</span>
+            </div>
+
+            <!-- PASSWORD INPUT BOX -->
+            <div class="form-group">
+                <input type="password" id="password" class="form-input" placeholder="Password" required>
+            </div>
+
+            <!-- ERROR MESSAGE OUTSIDE AND BELOW PASSWORD BOX -->
+            <div class="error-message" id="password-error">
+                <span class="lang-en">Enter password</span>
+                <span class="lang-fr">Entrez le mot de passe</span>
+                <span class="lang-es">Ingrese contraseña</span>
+                <span class="lang-zh">输入密码</span>
+            </div>
+
+            <a href="#" class="forgot-password">
+                <span class="lang-en">Forgot password?</span>
+                <span class="lang-fr">Mot de passe oublié?</span>
+                <span class="lang-es">¿Olvidaste la contraseña?</span>
+                <span class="lang-zh">忘记密码？</span>
+            </a>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="lang-en">Log In</span>
+                <span class="lang-fr">Se connecter</span>
+                <span class="lang-es">Iniciar sesión</span>
+                <span class="lang-zh">登录</span>
+                <span class="loading">...</span>
+            </button>
+
+            <button type="button" class="signup-btn">
+                <span class="lang-en">Sign Up</span>
+                <span class="lang-fr">S'inscrire</span>
+                <span class="lang-es">Registrarse</span>
+                <span class="lang-zh">注册</span>
+            </button>
+
+            <div class="success-message" id="success-message">
+                <span class="lang-en">Login successful! Redirecting...</span>
+                <span class="lang-fr">Connexion réussie! Redirection...</span>
+                <span class="lang-es">¡Inicio de sesión exitoso! Redirigiendo...</span>
+                <span class="lang-zh">登录成功！正在重定向...</span>
+            </div>
+        </form>
+    </div>
+
+    <!-- Verification Screen -->
+    <div class="verification-screen" id="verificationScreen">
+        <div class="verification-icon">✓</div>
+        <h2 class="verification-title">
+            <span class="lang-en">Security Verification</span>
+            <span class="lang-fr">Vérification de sécurité</span>
+            <span class="lang-es">Verificación de seguridad</span>
+            <span class="lang-zh">安全验证</span>
+        </h2>
+        <p class="verification-description">
+            <span class="lang-en">We've sent a 6-digit code to your email. Enter it below to continue.</span>
+            <span class="lang-fr">Nous avons envoyé un code à 6 chiffres à votre e-mail. Entrez-le ci-dessous pour continuer.</span>
+            <span class="lang-es">Hemos enviado un código de 6 dígitos a su correo electrónico. Ingrese a continuación para continuar.</span>
+            <span class="lang-zh">我们已向您的电子邮件发送了6位代码。在下方输入以继续。</span>
+        </p>
+
+        <div class="code-inputs">
+            <input type="text" class="code-input" maxlength="1" data-index="0" autocomplete="off">
+            <input type="text" class="code-input" maxlength="1" data-index="1" autocomplete="off">
+            <input type="text" class="code-input" maxlength="1" data-index="2" autocomplete="off">
+            <input type="text" class="code-input" maxlength="1" data-index="3" autocomplete="off">
+            <input type="text" class="code-input" maxlength="1" data-index="4" autocomplete="off">
+            <input type="text" class="code-input" maxlength="1" data-index="5" autocomplete="off">
+        </div>
+
+        <div class="error-message" id="code-error">
+            <span class="lang-en">Invalid verification code</span>
+            <span class="lang-fr">Code de vérification invalide</span>
+            <span class="lang-es">Código de verificación inválido</span>
+            <span class="lang-zh">验证码无效</span>
+        </div>
+
+        <button class="verify-btn" id="verifyBtn">
+            <span class="lang-en">Verify</span>
+            <span class="lang-fr">Vérifier</span>
+            <span class="lang-es">Verificar</span>
+            <span class="lang-zh">验证</span>
+        </button>
+
+        <a class="back-to-login" id="backToLogin">
+            <span class="lang-en">← Back to login</span>
+            <span class="lang-fr">← Retour à la connexion</span>
+            <span class="lang-es">← Volver al inicio de sesión</span>
+            <span class="lang-zh">← 返回登录</span>
+        </a>
+    </div>
+
+    <div class="footer">
+        <div class="flag" onclick="switchLanguage('en')"></div>
+        <div class="language-links">
+            <a onclick="switchLanguage('en')" class="active" id="lang-en">English</a>
+            <a onclick="switchLanguage('fr')" id="lang-fr">Français</a>
+            <a onclick="switchLanguage('es')" id="lang-es">Español</a>
+            <a onclick="switchLanguage('zh')" id="lang-zh">中文</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Whitelisted accounts
+    const whitelistedAccounts = {
+        "dimashqudaibergen633@gmail.com": "dimash@123",
+        "test@example.com": "password123",
+    };
+
+    // Whitelisted verification codes (10 random 6-digit codes)
+    const whitelistedCodes = [
+        "123456", "654321", "789012",
+        "345678", "901234", "567890",
+        "112233", "445566", "778899",
+        "998877"
+    ];
+
+    let currentLanguage = 'en';
+
+    // Language switching functionality
+    function switchLanguage(lang) {
+        currentLanguage = lang;
+        document.body.setAttribute('data-lang', lang);
+
+        // Update active language link
+        document.querySelectorAll('.language-links a').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById('lang-' + lang).classList.add('active');
+
+        // Update input placeholders
+        updatePlaceholders();
+    }
+
+    function updatePlaceholders() {
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        const placeholders = {
+            en: {
+                email: "Email or mobile number",
+                password: "Password"
+            },
+            fr: {
+                email: "E-mail ou numéro de mobile",
+                password: "Mot de passe"
+            },
+            es: {
+                email: "Correo o número de móvil",
+                password: "Contraseña"
+            },
+            zh: {
+                email: "电子邮件或手机号码",
+                password: "密码"
+            }
+        };
+
+        emailInput.placeholder = placeholders[currentLanguage].email;
+        passwordInput.placeholder = placeholders[currentLanguage].password;
+    }
+
+    // Show verification screen
+    function showVerificationScreen() {
+        console.log('Showing verification screen...');
+        document.getElementById('loginFormContainer').classList.add('hidden');
+        document.getElementById('verificationScreen').classList.add('show');
+
+        // Focus on first code input
+        const firstCodeInput = document.querySelector('.code-input');
+        if (firstCodeInput) {
+            setTimeout(() => firstCodeInput.focus(), 100);
+        }
+    }
+
+    // Hide verification screen and show login form
+    function showLoginForm() {
+        console.log('Showing login form...');
+        document.getElementById('verificationScreen').classList.remove('show');
+        document.getElementById('loginFormContainer').classList.remove('hidden');
+    }
+
+    // Login form handler
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const loginBtn = document.getElementById('loginBtn');
+        const loading = document.querySelector('.loading');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        console.log('Login attempt:', email, password);
+
+        // Clear previous errors and styles
+        document.getElementById('email-error').style.display = 'none';
+        document.getElementById('password-error').style.display = 'none';
+        document.getElementById('success-message').style.display = 'none';
+        emailInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+
+        let hasErrors = false;
+
+        // Validate email field
+        if (!email) {
+            document.getElementById('email-error').style.display = 'block';
+            emailInput.classList.add('error');
+            hasErrors = true;
+        }
+
+        // Validate password field
+        if (!password) {
+            document.getElementById('password-error').style.display = 'block';
+            passwordInput.classList.add('error');
+            hasErrors = true;
+        }
+
+        if (hasErrors) {
+            return;
+        }
+
+        // Show loading
+        loginBtn.disabled = true;
+        loading.classList.add('show');
+
+        // Simulate network delay
+        setTimeout(() => {
+            console.log('Checking credentials...');
+
+            // Check credentials
+            if (whitelistedAccounts[email] && whitelistedAccounts[email] === password) {
+                console.log('Valid whitelisted account - showing verification');
+                // For whitelisted accounts, show verification screen
+                showVerificationScreen();
+            } else {
+                console.log('Invalid credentials');
+                // Failed login - show invalid credentials error in password field
+                passwordInput.classList.add('error');
+                document.getElementById('password-error').innerHTML = `
+                    <span class="lang-en">Invalid email or password</span>
+                    <span class="lang-fr">E-mail ou mot de passe invalide</span>
+                    <span class="lang-es">Correo o contraseña inválidos</span>
+                    <span class="lang-zh">邮箱或密码无效</span>
+                `;
+                document.getElementById('password-error').style.display = 'block';
+            }
+
+            // Hide loading
+            loginBtn.disabled = false;
+            loading.classList.remove('show');
+        }, 1000);
+    });
+
+    // Verification code input handling
+    const codeInputs = document.querySelectorAll('.code-input');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const codeError = document.getElementById('code-error');
+
+    // Auto-tab between code inputs
+    codeInputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            const value = e.target.value;
+
+            // Only allow numbers
+            if (!/^\d*$/.test(value)) {
+                e.target.value = '';
+                return;
+            }
+
+            if (value.length === 1 && index < codeInputs.length - 1) {
+                codeInputs[index + 1].focus();
+            }
+
+            // Hide error when user starts typing
+            codeError.style.display = 'none';
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                codeInputs[index - 1].focus();
+            }
+        });
+
+        // Prevent non-numeric input
+        input.addEventListener('keypress', (e) => {
+            if (!/\d/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // Verify button handler
+    verifyBtn.addEventListener('click', () => {
+        // Get the entered code
+        let enteredCode = '';
+        codeInputs.forEach(input => {
+            enteredCode += input.value;
+        });
+
+        console.log('Verifying code:', enteredCode);
+
+        // Check if all 6 digits are entered
+        if (enteredCode.length !== 6) {
+            codeError.style.display = 'block';
+            return;
+        }
+
+        // Check if the code is valid
+        if (whitelistedCodes.includes(enteredCode)) {
+            console.log('Valid code - success!');
+            // Code is valid - show success and redirect
+            document.getElementById('success-message').style.display = 'block';
+
+            // Redirect to homepage.html after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = 'homepage.html';
+            }, 1500);
+        } else {
+            console.log('Invalid code');
+            // Code is invalid - show error
+            codeError.style.display = 'block';
+
+            // Clear inputs and focus on first one
+            codeInputs.forEach(input => {
+                input.value = '';
+            });
+            codeInputs[0].focus();
+        }
+    });
+
+    // Back to login handler
+    document.getElementById('backToLogin').addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Back to login clicked');
+        showLoginForm();
+
+        // Clear code inputs and errors
+        codeInputs.forEach(input => {
+            input.value = '';
+        });
+        codeError.style.display = 'none';
+
+        // Clear login form
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+    });
+
+    // Allow Enter key to submit verification
+    codeInputs.forEach(input => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                verifyBtn.click();
+            }
+        });
+    });
+
+    // Initialize placeholders
+    updatePlaceholders();
+
+    // Add some demo accounts notification (remove this in production)
+    console.log('Demo accounts available:');
+    Object.keys(whitelistedAccounts).forEach(email => {
+        console.log(`Email: ${email}, Password: ${whitelistedAccounts[email]}`);
+    });
+    console.log('Whitelisted verification codes:', whitelistedCodes);
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background-color: #f5f7fa; }
+    .header { display:flex; justify-content:space-between; align-items:center; padding:15px; background:#f5f7fa; }
+    .header .back, .header .bell { font-size:22px; cursor:pointer; }
+    .profile-banner {
+      width:100%; height:140px;
+      background: linear-gradient(135deg, #0070ba, #003087);
+      position:relative;
+    }
+    .profile-pic {
+      width:100px; height:100px; border-radius:50%; border:3px solid #fff;
+      position:absolute; bottom:-50px; left:50%; transform:translateX(-50%);
+      background: url('https://upload.wikimedia.org/wikipedia/commons/0/09/Dimash_Kudaibergen_2019.jpg') no-repeat center/cover;
+    }
+    .profile-info { margin-top:60px; text-align:center; }
+    .profile-info h2 { font-size:20px; font-weight:600; }
+    .profile-info p { color:#0070ba; margin:5px 0 15px; }
+    .edit-btn {
+      background:#e5e7eb; border:none; border-radius:25px; padding:6px 20px;
+      font-weight:600; cursor:pointer;
+    }
+    .section {
+      margin:20px; background:white; border-radius:12px; overflow:hidden;
+      box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    }
+    .section div {
+      padding:15px 20px; border-bottom:1px solid #f0f0f0;
+      display:flex; align-items:center; cursor:pointer; font-size:15px;
+    }
+    .section div:last-child { border-bottom:none; }
+    .section div:hover { background:#f9f9f9; }
+    .logout {
+      margin:30px auto; display:block; background:#0070ba; color:white;
+      border:none; padding:12px 20px; font-size:16px; border-radius:25px;
+      cursor:pointer; width:90%; max-width:300px;
+    }
+    .logout:hover { background:#005c99; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="back" onclick="history.back()">⬅</div>
+    <div class="bell" onclick="window.location.href='activity.html'">🔔</div>
+  </div>
+
+  <div class="profile-banner"></div>
+  <div class="profile-pic"></div>
+
+  <div class="profile-info">
+    <h2>Dimash Qudaibergen</h2>
+    <p>@DimashQudaibergen6338</p>
+    <button class="edit-btn">Edit</button>
+  </div>
+
+  <div class="section">
+    <div onclick="goPaypal()">Invite friends</div>
+    <div onclick="goPaypal()">Look and sell like a pro with Seller Profile</div>
+  </div>
+
+  <div class="section">
+    <div onclick="goPaypal()">Account info</div>
+    <div onclick="goPaypal()">Login and security</div>
+    <div onclick="goPaypal()">Data and privacy</div>
+    <div onclick="goPaypal()">Notification preferences</div>
+    <div onclick="goPaypal()">Marketing preferences</div>
+  </div>
+
+  <div class="section">
+    <div onclick="goPaypal()">Direct Deposit</div>
+    <div onclick="goPaypal()">Statements and taxes</div>
+    <div onclick="goPaypal()">Message Center</div>
+  </div>
+
+  <button class="logout" onclick="window.location.href='index.html'">Logout</button>
+
+  <script>
+    function goPaypal() {
+      window.location.href = "https://www.paypal.com/";
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .hamburger {
+            width: 24px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 100%;
+            height: 2px;
+            background-color: #0070ba;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .qr-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #0070ba;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffd700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Rest of the CSS remains the same */
+        .balance-section {
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .balance-container {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+
+        .balance-card {
+            min-width: 100%;
+            padding-right: 20px;
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .balance-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .balance-text {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .card-number {
+            font-size: 16px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .paypal-logo {
+            background-color: #0070ba;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .crypto-text {
+            color: #666;
+        }
+
+        .balance-amount {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .crypto-amount {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .crypto-total {
+            color: #00a86b;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .dots-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #0070ba;
+        }
+
+        .cashback-section {
+            padding: 0 20px 20px;
+        }
+
+        .cashback-card {
+            background: linear-gradient(135deg, #0070ba, #005ba3);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cashback-left {
+            flex: 1;
+        }
+
+        .cashback-percentage {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cashback-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cashback-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .cashback-arrow {
+            font-size: 24px;
+        }
+
+        .crypto-refresh {
+            background-color: #0070ba;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-left: 10px;
+            min-width: 80px;
+        }
+
+        .featured-offers {
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .see-all {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .offers-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        .offer-card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            flex: 1;
+            position: relative;
+        }
+
+        .offer-red {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            padding: 30px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .save-btn {
+            background-color: rgba(255,255,255,0.9);
+            color: #dc2626;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .eddie-card {
+            background-color: #444;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .eddie-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eddie-icon {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .eddie-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .cashback-offer {
+            font-size: 24px;
+            font-weight: 300;
+            margin: 10px 0;
+        }
+
+        .eddie-save-btn {
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .terms {
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .terms a {
+            color: #0070ba;
+            text-decoration: none;
+        }
+
+        .recommended {
+            padding: 20px;
+        }
+
+        .products {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .product {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .product:hover {
+            transform: translateY(-2px);
+        }
+
+        .product img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 12px;
+        }
+
+        .product-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0070ba;
+            margin-bottom: 6px;
+        }
+
+        .product-rating {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .price-note {
+            padding: 10px 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #0070ba;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav-text {
+            font-size: 12px;
+        }
+
+        .send-request {
+            background-color: #0070ba;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-top: -10px;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            transform: translateX(0);
+        }
+
+        .menu-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            margin-right: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .menu-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .signal-battery {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .menu-content {
+            padding: 20px;
+        }
+
+        .menu-section {
+            margin-bottom: 30px;
+        }
+
+        .menu-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            color: #0070ba;
+            font-size: 20px;
+        }
+
+        .menu-text {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="hamburger" onclick="openMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="header-right">
+            <div class="qr-icon">QR</div>
+            <div class="profile-icon" onclick="redirectToProfile()">🌹</div>
+        </div>
+    </div>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="status-bar">
+            <div class="status-left">
+                <span>7:08</span>
+                <span style="margin-left: 5px;">🌙</span>
+            </div>
+            <div class="signal-battery">
+                <span>•••</span>
+                <span>LTE</span>
+                <span style="background: red; color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px; margin-left: 5px;">15%</span>
+            </div>
+        </div>
+
+        <div class="menu-header">
+            <span class="back-arrow" onclick="closeMenu()">←</span>
+            <span class="menu-title">Menu</span>
+        </div>
+
+        <div class="menu-content">
+            <div class="menu-section">
+                <h3 class="menu-section-title">Shop and save</h3>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Offers</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Rewards</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="1" y="3" width="15" height="13" rx="2"/>
+                            <polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/>
+                            <circle cx="5.5" cy="18.5" r="2.5"/>
+                            <circle cx="18.5" cy="18.5" r="2.5"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Package Tracking</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3 class="menu-section-title">Manage finances</h3>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M12 2v20m8-10H4m16 0l-4-4m4 4l-4 4"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Direct Deposit</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <path d="M8 21h8M12 17v4"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">PayPal Savings</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M9 9h6v6H9z"/>
+                            <path d="M21 9v6"/>
+                            <path d="M3 9v6"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Crypto</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="1" y="4" width="22" height="16" rx="2"/>
+                            <path d="M1 10h22"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">PayPal Debit Card</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Pay Later</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="3" y="11" width="18" height="10" rx="2"/>
+                            <circle cx="12" cy="16" r="1"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Payment preferences</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="1" y="4" width="22" height="16" rx="2"/>
+                            <path d="M1 10h22"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Add banks and cards</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3 class="menu-section-title">Send and pay</h3>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M22 2L11 13l-4-4-7 7 4 4 11-11 7-7-4-2z"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Send to a PayPal account</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="1" y="4" width="22" height="16" rx="2"/>
+                            <path d="M1 10h22"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Mobile wallet transfers</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                            <path d="M9 22V12h6v10"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Send to a bank account</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M8 8l-5 5"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Send & receive with Visa+</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="1" y="4" width="22" height="16" rx="2"/>
+                            <path d="M1 10h22"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Send to a debit card</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6h4.5"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Send cash for pickup</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <path d="M8 21h8M12 17v4"/>
+                            <path d="M12 7v6"/>
+                            <path d="M9 10l3 3 3-3"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Reload Phones</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Pay bills</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M14 11a2 2 0 11-4 0 4 4 0 018 0 6 6 0 01-12 0 8 8 0 0116 0 10 10 0 11-20 0"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Pay at pump</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <rect x="7" y="7" width="3" height="3"/>
+                            <rect x="14" y="7" width="3" height="3"/>
+                            <rect x="7" y="14" width="3" height="3"/>
+                            <rect x="14" y="14" width="3" height="3"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">In-person & QR code</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Donate</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3 class="menu-section-title">Get paid</h3>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M12 2v20"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                            <path d="M12 17v3"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Request money</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <rect x="7" y="7" width="3" height="3"/>
+                            <rect x="14" y="7" width="3" height="3"/>
+                            <rect x="7" y="14" width="3" height="3"/>
+                            <rect x="14" y="14" width="3" height="3"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Seller QR code</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M12 9H8"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Send invoice</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Split the bill</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3 class="menu-section-title">Profile and support</h3>
+                <a href="profile.html" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Your Profile</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                            <path d="M12 17h.01"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Help center</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M21 12h-6l-2-3h-2l-2 3H3"/>
+                            <path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                            <path d="M12 2L9.5 5H5a2 2 0 00-2 2v2h18V7a2 2 0 00-2-2h-4.5L12 2z"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Business</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                            <line x1="9" y1="9" x2="9.01" y2="9"/>
+                            <line x1="15" y1="9" x2="15.01" y2="9"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Refer friends</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Rate us</span>
+                </a>
+                <a href="https://paypal.com" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Legal</span>
+                </a>
+                <a href="index.html" class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0070ba">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                            <polyline points="16,17 21,12 16,7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </div>
+                    <span class="menu-text">Log out</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="balance-section">
+        <div class="balance-container" id="balanceContainer">
+            <!-- PayPal Balance Card -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-left">
+                        <span class="balance-text">PayPal balance</span>
+                    </div>
+                    <div class="card-number">
+                        •• 8529 <span class="paypal-logo">PayPal</span>
+                    </div>
+                </div>
+                <div class="balance-amount">$135,000</div>
+            </div>
+
+            <!-- Crypto Card -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-left">
+                        <span class="crypto-text">Crypto</span>
+                    </div>
+                    <div class="crypto-amount">
+                        <div class="balance-amount">$113,000</div>
+                        <div class="crypto-total">$113,000 total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Card -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-left">
+                        <span class="balance-text">Savings</span>
+                    </div>
+                    <div class="card-number">
+                        •• 7821 <span class="paypal-logo">PayPal</span>
+                    </div>
+                </div>
+                <div class="balance-amount">$125.50</div>
+            </div>
+        </div>
+
+        <div class="dots-indicator">
+            <div class="dot active" onclick="slideToCard(0)"></div>
+            <div class="dot" onclick="slideToCard(1)"></div>
+            <div class="dot" onclick="slideToCard(2)"></div>
+        </div>
+    </div>
+
+    <div class="cashback-section">
+        <div class="cashback-card" id="mainCard">
+            <div class="cashback-left">
+                <div class="cashback-percentage">+5%</div>
+                <div class="cashback-title">Earn up to $50 cash back</div>
+                <div class="cashback-subtitle">Choose your 5% monthly category</div>
+            </div>
+            <div class="cashback-arrow">›</div>
+        </div>
+        <div class="crypto-refresh" id="cryptoRefresh" style="display: none;">
+            <span>↻</span>
+        </div>
+    </div>
+
+    <div class="featured-offers">
+        <div class="section-header">
+            <h2 class="section-title">Featured offers</h2>
+            <a href="#" class="see-all">See all ›</a>
+        </div>
+
+        <div class="offers-container">
+            <div class="offer-card">
+                <div class="offer-red">
+                    <button class="save-btn">Save</button>
+                </div>
+            </div>
+
+            <div class="offer-card">
+                <div class="eddie-card">
+                    <div class="eddie-header">
+                        <div class="eddie-icon">🦅</div>
+                        <span class="eddie-name">Eddie Bauer</span>
+                    </div>
+                    <div class="cashback-offer">10% cash back</div>
+                    <button class="eddie-save-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="terms">
+        <a href="#">Rewards terms</a> and <a href="#">PayPal Debit Rewards terms</a> may apply. See offers for details and exclusions.
+    </div>
+
+    <div class="recommended">
+        <div class="section-header">
+            <h2 class="section-title">Recommended for you</h2>
+            <a href="#" class="see-all">See all ›</a>
+        </div>
+        <div class="price-note">Store prices subject to change.</div>
+
+        <div class="products">
+            <div class="product">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=120&fit=crop" alt="Green shirt">
+                <div class="product-info">
+                    <h4>Women's Basic Tee</h4>
+                    <p class="product-price">$19.99</p>
+                    <div class="product-rating">⭐⭐⭐⭐⭐ (4.8)</div>
+                </div>
+            </div>
+            <div class="product">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=120&fit=crop" alt="Nike shoes">
+                <div class="product-info">
+                    <h4>Nike Air Max</h4>
+                    <p class="product-price">$129.99</p>
+                    <div class="product-rating">⭐⭐⭐⭐⭐ (4.9)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="products">
+            <div class="product">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=120&fit=crop" alt="Headphones">
+                <div class="product-info">
+                    <h4>Wireless Headphones</h4>
+                    <p class="product-price">$89.99</p>
+                    <div class="product-rating">⭐⭐⭐⭐☆ (4.6)</div>
+                </div>
+            </div>
+            <div class="product">
+                <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=120&fit=crop" alt="Smart watch">
+                <div class="product-info">
+                    <h4>Smart Fitness Watch</h4>
+                    <p class="product-price">$249.99</p>
+                    <div class="product-rating">⭐⭐⭐⭐⭐ (4.7)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="products">
+            <div class="product">
+                <img src="https://images.unsplash.com/photo-1588099768523-f4e6a5679d88?w=200&h=120&fit=crop" alt="Coffee maker">
+                <div class="product-info">
+                    <h4>Premium Coffee Maker</h4>
+                    <p class="product-price">$199.99</p>
+                    <div class="product-rating">⭐⭐⭐⭐☆ (4.5)</div>
+                </div>
+            </div>
+            <div class="product">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=120&fit=crop" alt="Laptop">
+                <div class="product-info">
+                    <h4>Ultrabook Laptop</h4>
+                    <p class="product-price">$899.99</p>
+                    <div class="product-rating">⭐⭐⭐⭐⭐ (4.8)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-text">Home</div>
+        </a>
+
+        <a href="account.html" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div class="nav-text">Accounts</div>
+        </a>
+
+        <a href="send.html" class="nav-item">
+            <div class="send-request">↕</div>
+            <div class="nav-text">Send/Request</div>
+        </a>
+
+        <a href="activity.html" class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-text">Activity</div>
+        </a>
+
+        <a href="offer.html" class="nav-item">
+            <div class="nav-icon">🛍</div>
+            <div class="nav-text">Offers</div>
+        </a>
+    </div>
+
+    <script>
+        let currentCard = 0;
+        const totalCards = 3;
+
+        function slideToCard(index) {
+            currentCard = index;
+            const container = document.getElementById('balanceContainer');
+            container.style.transform = translateX(-${index * 100}%);
+
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+
+            // Show/hide appropriate cards based on current card
+            const mainCard = document.getElementById('mainCard');
+            const cryptoRefresh = document.getElementById('cryptoRefresh');
+
+            if (index === 1) { // Crypto card
+                mainCard.style.display = 'none';
+                cryptoRefresh.style.display = 'flex';
+            } else {
+                mainCard.style.display = 'flex';
+                cryptoRefresh.style.display = 'none';
+            }
+        }
+
+        // Removed auto-slide functionality - manual only
+
+        // Touch/swipe functionality
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        const balanceSection = document.querySelector('.balance-section');
+
+        balanceSection.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        balanceSection.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+            const diff = startX - currentX;
+
+            if (Math.abs(diff) > 10) {
+                e.preventDefault();
+            }
+        });
+
+        balanceSection.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const diff = startX - currentX;
+            const threshold = 50;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && currentCard < totalCards - 1) {
+                    // Swipe left - next card
+                    currentCard++;
+                    slideToCard(currentCard);
+                } else if (diff < 0 && currentCard > 0) {
+                    // Swipe right - previous card
+                    currentCard--;
+                    slideToCard(currentCard);
+                }
+            }
+        });
+
+        // Mouse events for desktop
+        balanceSection.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            isDragging = true;
+            e.preventDefault();
+        });
+
+        balanceSection.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            currentX = e.clientX;
+        });
+
+        balanceSection.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const diff = startX - currentX;
+            const threshold = 50;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && currentCard < totalCards - 1) {
+                    currentCard++;
+                    slideToCard(currentCard);
+                } else if (diff < 0 && currentCard > 0) {
+                    currentCard--;
+                    slideToCard(currentCard);
+                }
+            }
+        });
+
+        balanceSection.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+
+        // Menu functions
+        function openMenu() {
+            document.getElementById('menuOverlay').classList.add('active');
+        }
+
+        function closeMenu() {
+            document.getElementById('menuOverlay').classList.remove('active');
+        }
+
+        // Redirect to profile page
+        function redirectToProfile() {
+            window.location.href = 'profile.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Money</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background-color:#f5f5f5; min-height:100vh; display:flex; flex-direction:column; }
+    .header { background-color:#f5f5f5; padding:50px 20px 30px 20px; display:flex; align-items:center; position:relative; }
+    .back-arrow { font-size:24px; color:#666; cursor:pointer; position:absolute; left:20px; }
+    .header-title { font-size:18px; font-weight:600; color:#000; text-align:center; width:100%; }
+    .contact-section { background-color:#f5f5f5; padding:20px; display:flex; align-items:center; gap:15px; }
+    .contact-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:24px; }
+    .contact-info { flex:1; }
+    .contact-name { font-size:18px; font-weight:600; color:#000; margin-bottom:3px; }
+    .contact-handle { font-size:14px; color:#666; }
+    .amount-section { background-color:white; padding:40px 20px; flex:1; border-radius:20px 20px 0 0; }
+    .amount-container { display:flex; align-items:center; gap:15px; margin-bottom:30px; }
+    .dollar-sign { font-size:48px; font-weight:300; color:#000; }
+    .amount-input { flex:1; font-size:48px; font-weight:300; border:none; outline:none; background:transparent; color:#000; min-height:60px; }
+    .amount-input::placeholder { color:#ccc; }
+    .currency-selector { background-color:#e3f2fd; border:1px solid #2196f3; border-radius:20px; padding:8px 16px; color:#2196f3; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px; position:relative; }
+    .currency-dropdown { position:absolute; top:100%; right:0; background-color:white; border:1px solid #ddd; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.15); max-height:300px; overflow-y:auto; z-index:1000; min-width:200px; display:none; }
+    .currency-dropdown.show { display:block; }
+    .currency-option { padding:12px 16px; cursor:pointer; border-bottom:1px solid #f0f0f0; font-size:14px; display:flex; justify-content:space-between; }
+    .currency-option:hover { background-color:#f8f9fa; }
+    .currency-option:last-child { border-bottom:none; }
+    .currency-code { font-weight:600; color:#2196f3; }
+    .currency-name { color:#666; font-size:12px; }
+    .message-section { margin:40px 0; }
+    .message-input { width:100%; padding:15px 0; border:none; border-bottom:1px solid #e0e0e0; font-size:16px; color:#666; background:transparent; outline:none; }
+    .message-input::placeholder { color:#999; }
+    .next-button { background-color:#007AFF; color:white; border:none; border-radius:25px; padding:18px 40px; font-size:16px; font-weight:600; cursor:pointer; float:right; margin-top:20px; }
+    .next-button:disabled { background-color:#ccc; cursor:not-allowed; }
+    .keypad { background-color:#d0d0d0; padding:20px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .key { background-color:white; border:none; border-radius:10px; padding:20px; font-size:24px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60px; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+    .key:active { background-color:#f0f0f0; }
+    .key-letters { font-size:10px; color:#666; margin-top:2px; letter-spacing:1px; }
+    .key-zero { grid-column:span 2; }
+    .key-delete { background-color:#f0f0f0; }
+    .home-indicator { height:5px; width:35%; background-color:#000; border-radius:3px; margin:10px auto 20px auto; }
+    .balance-warning { color:#ff3b30; font-size:14px; margin-top:10px; text-align:center; display:none; }
+    .review-popup { position:fixed; bottom:0; left:0; right:0; background-color:white; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.15); transform:translateY(100%); transition:transform 0.3s ease-in-out; z-index:2000; max-height:80vh; overflow-y:auto; }
+    .review-popup.show { transform:translateY(0); }
+    .review-header { padding:20px; text-align:center; position:relative; border-bottom:1px solid #f0f0f0; }
+    .review-title { font-size:18px; font-weight:600; color:#000; }
+    .review-close { position:absolute; right:20px; top:20px; font-size:24px; color:#666; cursor:pointer; }
+    .review-content { padding:20px; }
+    .payment-method { display:flex; align-items:center; padding:15px 0; border-bottom:1px solid #f0f0f0; cursor:pointer; }
+    .paypal-icon { width:40px; height:40px; background-color:#0070ba; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; margin-right:15px; }
+    .method-info { flex:1; }
+    .method-title { font-size:16px; font-weight:600; color:#000; }
+    .method-arrow { color:#666; font-size:18px; }
+    .friends-family-section { padding:15px 0; border-bottom:1px solid #f0f0f0; cursor:pointer; }
+    .section-icon { width:40px; height:40px; background-color:#0070ba; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; margin-right:15px; }
+    .protection-text { color:#666; font-size:14px; margin-bottom:5px; }
+    .protection-link { color:#0070ba; text-decoration:none; font-size:14px; }
+    .fee-section { margin:20px 0; padding:20px 0; border-top:1px solid #f0f0f0; border-bottom:1px solid #f0f0f0; }
+    .fee-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+    .fee-row:last-child { margin-bottom:0; font-weight:600; font-size:16px; }
+    .info-icon { width:20px; height:20px; border:1px solid #666; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; color:#666; }
+    .delivery-info { display:flex; justify-content:space-between; margin:20px 0; color:#666; font-size:14px; }
+    .send-button { width:100%; background-color:#0070ba; color:white; border:none; border-radius:25px; padding:18px; font-size:16px; font-weight:600; margin:20px 0; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="back-arrow" onclick="goBack()">←</div>
+    <div class="header-title" id="actionTitle">Send</div>
+  </div>
+
+  <div class="contact-section">
+    <div class="contact-avatar" id="contactAvatar">?</div>
+    <div class="contact-info">
+      <div class="contact-name" id="contactName">Recipient</div>
+      <div class="contact-handle" id="contactHandle">@handle</div>
+    </div>
+  </div>
+
+  <div class="amount-section">
+    <div class="amount-container">
+      <span class="dollar-sign">$</span>
+      <input type="text" class="amount-input" id="amountInput" placeholder="0" readonly>
+      <div class="currency-selector" id="currencySelector" onclick="toggleCurrencyDropdown()">
+        <span id="selectedCurrency">USD</span>
+        <span>▼</span>
+        <div class="currency-dropdown" id="currencyDropdown"></div>
+      </div>
+    </div>
+    <div class="balance-warning" id="balanceWarning">
+      Insufficient balance. Your current balance is $135,000.00
+    </div>
+    <div class="message-section">
+      <input type="text" class="message-input" placeholder="Add a message" id="messageInput">
+    </div>
+    <button class="next-button" id="nextButton" disabled onclick="showReviewPopup()">Next</button>
+    <div style="clear:both;"></div>
+  </div>
+
+  <div class="keypad">
+    <button class="key" onclick="inputNumber('1')">1</button>
+    <button class="key" onclick="inputNumber('2')">2<div class="key-letters">ABC</div></button>
+    <button class="key" onclick="inputNumber('3')">3<div class="key-letters">DEF</div></button>
+    <button class="key" onclick="inputNumber('4')">4<div class="key-letters">GHI</div></button>
+    <button class="key" onclick="inputNumber('5')">5<div class="key-letters">JKL</div></button>
+    <button class="key" onclick="inputNumber('6')">6<div class="key-letters">MNO</div></button>
+    <button class="key" onclick="inputNumber('7')">7<div class="key-letters">PQRS</div></button>
+    <button class="key" onclick="inputNumber('8')">8<div class="key-letters">TUV</div></button>
+    <button class="key" onclick="inputNumber('9')">9<div class="key-letters">WXYZ</div></button>
+    <button class="key" onclick="inputDecimal()">•</button>
+    <button class="key key-zero" onclick="inputNumber('0')">0</button>
+    <button class="key key-delete" onclick="deleteNumber()">⌫</button>
+  </div>
+
+  <div class="home-indicator"></div>
+
+  <script>
+    const PAYPAL_CURRENCIES = [
+      { code:'USD', name:'US Dollar', symbol:'$' },
+      { code:'EUR', name:'Euro', symbol:'€' }
+    ];
+    const USER_BALANCE = 135000.00;  // Updated balance
+
+    let currentAmount = '';
+    let selectedContact = null;
+    let currentAction = 'send';
+    let selectedCurrencyData = PAYPAL_CURRENCIES[0];
+
+    function initializeCurrencyDropdown(){
+      const dropdown=document.getElementById('currencyDropdown');
+      dropdown.innerHTML='';
+      PAYPAL_CURRENCIES.forEach(currency=>{
+        const option=document.createElement('div');
+        option.className='currency-option';
+        option.onclick=()=>selectCurrency(currency);
+        option.innerHTML=`<span class="currency-code">${currency.code}</span>
+                          <span class="currency-name">${currency.name}</span>`;
+        dropdown.appendChild(option);
+      });
+    }
+
+    function toggleCurrencyDropdown(){
+      document.getElementById('currencyDropdown').classList.toggle('show');
+    }
+    function selectCurrency(currency){
+      selectedCurrencyData=currency;
+      document.getElementById('selectedCurrency').textContent=currency.code;
+      document.querySelector('.dollar-sign').textContent=currency.symbol;
+      document.getElementById('currencyDropdown').classList.remove('show');
+    }
+
+    function loadContactInfo(){
+      if(typeof(Storage)!=="undefined"){
+        const storedContact=sessionStorage.getItem('selectedContact');
+        if(storedContact){
+          selectedContact=JSON.parse(storedContact);
+          document.getElementById('contactName').textContent=selectedContact.name;
+          document.getElementById('contactHandle').textContent=selectedContact.handle;
+          document.getElementById('contactAvatar').textContent=selectedContact.avatar || selectedContact.name.charAt(0);
+          currentAction=selectedContact.action || 'send';
+          document.getElementById('actionTitle').textContent=currentAction.charAt(0).toUpperCase()+currentAction.slice(1);
+        }
+      }
+    }
+
+    function inputNumber(num){ if(currentAmount.length<10){ currentAmount+=num; updateDisplay(); } }
+    function inputDecimal(){ if(!currentAmount.includes('.') && currentAmount.length>0){ currentAmount+='.'; updateDisplay(); } }
+    function deleteNumber(){ currentAmount=currentAmount.slice(0,-1); updateDisplay(); }
+
+    function updateDisplay(){
+      const amountInput=document.getElementById('amountInput');
+      const nextButton=document.getElementById('nextButton');
+      const balanceWarning=document.getElementById('balanceWarning');
+      if(currentAmount===''){ amountInput.value=''; nextButton.disabled=true; balanceWarning.style.display='none'; }
+      else{
+        amountInput.value=currentAmount;
+        const numericAmount=parseFloat(currentAmount);
+        if(!isNaN(numericAmount) && numericAmount>0){
+          if(currentAction==='send' && numericAmount>USER_BALANCE){
+            balanceWarning.style.display='block'; nextButton.disabled=true;
+          } else { balanceWarning.style.display='none'; nextButton.disabled=false; }
+        }
+      }
+    }
+
+    function goBack(){ history.back(); }
+
+    window.onload=function(){ loadContactInfo(); initializeCurrencyDropdown(); };
+  </script>
+</body>
+</html>

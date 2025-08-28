@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal - Accounts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f7f7f7;
+        color: #2c2e2f;
+    }
+
+    .header {
+        background-color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .menu-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .menu-btn svg {
+        width: 24px;
+        height: 24px;
+        fill: #0070ba;
+    }
+
+    .qr-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .qr-btn svg {
+        width: 24px;
+        height: 24px;
+        fill: #0070ba;
+    }
+
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff6b35, #f7931e, #ffd100);
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .accounts-title {
+        font-size: 32px;
+        font-weight: 300;
+        margin-bottom: 20px;
+    }
+
+    .paypal-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 16px;
+        font-weight: 400;
+        color: #2c2e2f;
+    }
+
+    .card-number {
+        font-size: 14px;
+        color: #6c7378;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .paypal-logo {
+        width: 60px;
+        height: 20px;
+        background: #003087;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .balance {
+        font-size: 36px;
+        font-weight: 300;
+        margin-bottom: 5px;
+    }
+
+    .balance-label {
+        font-size: 14px;
+        color: #6c7378;
+        margin-bottom: 30px;
+    }
+
+    .add-money-btn {
+        background: #0070ba;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 15px;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+    .cashback-section {
+        background: #cce7ff;
+        border-radius: 12px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .cashback-icon {
+        background: #0070ba;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .cashback-text {
+        flex: 1;
+        font-size: 16px;
+        color: #2c2e2f;
+    }
+
+    .arrow-right {
+        width: 20px;
+        height: 20px;
+        fill: #6c7378;
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+
+    .rewards-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .rewards-text {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .partner-logos {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .partner-logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .walmart { background: #0071ce; }
+    .bestbuy { background: #003b64; }
+    .seven-eleven { background: #ff6600; }
+    .uber { background: #000000; }
+    .dg { background: #ffdd00; color: #000; }
+
+    .cashback-link {
+        color: #0070ba;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .money-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .money-option {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .option-title {
+        font-size: 16px;
+        font-weight: 400;
+        margin-bottom: 40px;
+    }
+
+    .option-rate {
+        font-size: 12px;
+        color: #00a651;
+        background: #e8f5e8;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    .option-amount {
+        font-size: 24px;
+        font-weight: 300;
+        color: #2c2e2f;
+    }
+
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 8px;
+        text-decoration: none;
+        color: #6c7378;
+        font-size: 10px;
+        cursor: pointer;
+    }
+
+    .nav-item.active {
+        color: #2c2e2f;
+    }
+
+    .nav-item svg {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 4px;
+        fill: currentColor;
+    }
+
+    .send-request-btn {
+        background: #0070ba;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -20px;
+        box-shadow: 0 4px 12px rgba(0,112,186,0.3);
+    }
+
+    .send-request-btn svg {
+        fill: white;
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+        background-color: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 30px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .modal-icon {
+        width: 60px;
+        height: 60px;
+        background: #0070ba;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+
+    .modal-icon svg {
+        width: 30px;
+        height: 30px;
+        fill: white;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 15px;
+        color: #2c2e2f;
+    }
+
+    .modal-text {
+        font-size: 16px;
+        color: #6c7378;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+
+    .modal-btn {
+        background: #0070ba;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .modal-btn:hover {
+        background: #005ea6;
+    }
+
+    /* Menu Toggle Styles */
+    .menu-overlay {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .menu-content {
+        background-color: white;
+        width: 280px;
+        height: 100%;
+        padding: 20px;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .menu-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 20px;
+    }
+
+    .menu-profile-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff6b35, #f7931e, #ffd100);
+    }
+
+    .menu-user-info h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .menu-user-info p {
+        font-size: 14px;
+        color: #6c7378;
+    }
+
+    .menu-items {
+        list-style: none;
+    }
+
+    .menu-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .menu-item a {
+        text-decoration: none;
+        color: #2c2e2f;
+        font-size: 16px;
+        display: block;
+    }
+
+    .menu-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6c7378;
+    }
+</style>
+
+
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="menu-btn" onclick="toggleMenu()">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+        </button>
+
+
+    <button class="qr-btn">
+        <svg viewBox="0 0 24 24">
+            <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4z"/>
+            <path d="M18 13h-2v2h2v-2zM20 15h-2v2h2v-2zM16 15h-2v2h2v-2zM18 17h-2v2h2v-2zM20 19h-2v2h2v-2z"/>
+        </svg>
+    </button>
+
+    <div class="profile-img"></div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <h1 class="accounts-title">Accounts</h1>
+
+    <!-- PayPal Balance Card -->
+    <div class="paypal-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">PayPal balance</div>
+            </div>
+            <div class="card-number">
+                ••• 8529
+                <div class="paypal-logo">PayPal</div>
+            </div>
+        </div>
+
+        <div class="balance">$0.84</div>
+        <div class="balance-label">Available balance</div>
+
+        <button class="add-money-btn" onclick="showAddMoneyModal()">Add Money</button>
+
+        <div class="cashback-section">
+            <div class="cashback-icon">+5%</div>
+            <div class="cashback-text">Choose a PayPal Debit 5% cash back category</div>
+            <svg class="arrow-right" viewBox="0 0 24 24">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Rewards Section -->
+    <h2 class="section-title">Rewards</h2>
+    <div class="rewards-card">
+        <div class="rewards-text">Explore all the ways it pays to PayPal</div>
+
+        <div class="partner-logos">
+            <div class="partner-logo walmart">W</div>
+            <div class="partner-logo bestbuy">BB</div>
+            <div class="partner-logo seven-eleven">7</div>
+            <div class="partner-logo uber">U</div>
+            <div class="partner-logo dg">DG</div>
+        </div>
+
+        <a href="#" class="cashback-link">Start earning cash back</a>
+    </div>
+
+    <!-- Money Options -->
+    <h2 class="section-title">Do more with your money</h2>
+    <div class="money-options">
+        <div class="money-option">
+            <div class="option-title">PayPal Savings</div>
+            <div class="option-rate">3.80% APY</div>
+            <div class="option-amount">$0.00</div>
+        </div>
+
+        <div class="money-option">
+            <div class="option-title">Crypto</div>
+            <div class="option-rate">$0.00 total return</div>
+            <div class="option-amount">$0.00</div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+    <a href="homepage.html" class="nav-item">
+        <svg viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Home
+    </a>
+
+    <div class="nav-item active">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+        </svg>
+        Accounts
+    </div>
+
+    <a href="send.html" class="nav-item">
+        <div class="send-request-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+            </svg>
+        </div>
+        Send/Request
+    </a>
+
+    <a href="activity.html" class="nav-item">
+        <svg viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>
+        Activity
+    </a>
+
+    <a href="offers.html" class="nav-item">
+        <svg viewBox="0 0 24 24">
+            <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
+        </svg>
+        Offers
+    </a>
+</div>
+
+<!-- Add Money Modal -->
+<div id="addMoneyModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+        </div>
+        <div class="modal-title">Account Activity Limited</div>
+        <div class="modal-text">We currently limit some activities for your account due to new session security measures. Please try again later or contact customer support for assistance.</div>
+        <button class="modal-btn" onclick="closeAddMoneyModal()">Got It</button>
+    </div>
+</div>
+
+<!-- Menu Overlay -->
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()">
+    <div class="menu-content" onclick="event.stopPropagation()">
+        <button class="menu-close" onclick="closeMenu()">&times;</button>
+
+        <div class="menu-header">
+            <div class="menu-profile-img"></div>
+            <div class="menu-user-info">
+                <h3>John Doe</h3>
+                <p>john.doe@email.com</p>
+            </div>
+        </div>
+
+        <ul class="menu-items">
+            <li class="menu-item"><a href="homepage.html">Home</a></li>
+            <li class="menu-item"><a href="#">Accounts</a></li>
+            <li class="menu-item"><a href="send.html">Send & Request</a></li>
+            <li class="menu-item"><a href="activity.html">Activity</a></li>
+            <li class="menu-item"><a href="offers.html">Offers</a></li>
+            <li class="menu-item"><a href="#">Settings</a></li>
+            <li class="menu-item"><a href="#">Help</a></li>
+            <li class="menu-item"><a href="#">Sign Out</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function showAddMoneyModal() {
+        document.getElementById('addMoneyModal').style.display = 'block';
+    }
+
+    function closeAddMoneyModal() {
+        document.getElementById('addMoneyModal').style.display = 'none';
+    }
+
+    function toggleMenu() {
+        document.getElementById('menuOverlay').style.display = 'block';
+    }
+
+    function closeMenu() {
+        document.getElementById('menuOverlay').style.display = 'none';
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById('addMoneyModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+
+</body>
+</html>

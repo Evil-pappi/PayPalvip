@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send and Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+    body {
+        background-color: #f5f5f5;
+        min-height: 100vh;
+    }
+
+    .status-bar {
+        background-color: #f5f5f5;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .time {
+        background-color: #34d058;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .signal-battery {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .header {
+        background-color: #f5f5f5;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .menu-icon {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        cursor: pointer;
+    }
+
+    .menu-line {
+        width: 20px;
+        height: 2px;
+        background-color: #007AFF;
+    }
+
+    .profile-icon {
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(135deg, #ff6b35, #f7931e);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #000;
+        padding: 0 20px 20px 20px;
+        background-color: #f5f5f5;
+    }
+
+    .search-container {
+        padding: 0 20px 20px 20px;
+        background-color: #f5f5f5;
+    }
+
+    .search-box {
+        position: relative;
+        background-color: white;
+        border-radius: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 15px 20px 15px 50px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        outline: none;
+        background-color: transparent;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        opacity: 0.5;
+    }
+
+    .options-icon {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    .content {
+        background-color: white;
+        min-height: 60vh;
+        border-radius: 20px 20px 0 0;
+        padding: 30px 20px;
+    }
+
+    .suggested-label {
+        font-size: 18px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 20px;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .contact-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .contact-item:last-child {
+        border-bottom: none;
+    }
+
+    .contact-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .contact-info {
+        flex: 1;
+    }
+
+    .contact-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 3px;
+    }
+
+    .contact-handle {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .info-icon {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .bottom-actions {
+        position: fixed;
+        bottom: 80px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn-send {
+        flex: 1;
+        background-color: #007AFF;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 18px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-request {
+        flex: 1;
+        background-color: transparent;
+        color: #666;
+        border: none;
+        border-radius: 25px;
+        padding: 18px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-request.active {
+        background-color: #007AFF;
+        color: white;
+    }
+
+    .btn-send.active {
+        background-color: #007AFF;
+        color: white;
+    }
+
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        padding: 10px 0 30px 0;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #666;
+        font-size: 12px;
+    }
+
+    .nav-item.active {
+        color: #000;
+    }
+
+    .nav-icon {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-item.active .nav-icon {
+        background-color: #000;
+        border-radius: 50%;
+        color: white;
+    }
+
+    .search-results {
+        display: none;
+    }
+
+    .search-results.show {
+        display: block;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+    <div class="status-bar">
+        <div></div>
+        <div class="signal-battery">
+            <span>••</span>
+            <span>LTE</span>
+        </div>
+    </div>
+
+<div class="header">
+    <div class="menu-icon">
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+    </div>
+    <div class="profile-icon">🌹</div>
+</div>
+
+<div class="title">Send and Request</div>
+
+<div class="search-container">
+    <div class="search-box">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="21 21l-4.35-4.35"></path>
+        </svg>
+        <input
+            type="text"
+            class="search-input"
+            placeholder="Name, username, email, mobile"
+            id="searchInput"
+        >
+        <div class="options-icon">⋯</div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="suggested-label" id="suggestedLabel">Suggested</div>
+
+    <div id="defaultContact" class="contact-item">
+        <div class="contact-avatar">T</div>
+        <div class="contact-info">
+            <div class="contact-name">Tiernan Gustafson</div>
+            <div class="contact-handle">@thrives1</div>
+        </div>
+        <div class="info-icon">i</div>
+    </div>
+
+    <div id="searchResults" class="search-results"></div>
+    <div id="noResults" class="no-results" style="display: none;">
+        No contacts found matching your search.
+    </div>
+</div>
+
+<div class="bottom-actions">
+    <button class="btn-send active" id="sendBtn">Send</button>
+    <button class="btn-request active" id="requestBtn">Request</button>
+</div>
+
+<div class="bottom-nav">
+    <a href="homepage.html" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        Home
+    </a>
+    <a href="account.html" class="nav-item">
+        <div class="nav-icon">💳</div>
+        Accounts
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">↕</div>
+        Send/Request
+    </a>
+    <a href="activity.html" class="nav-item">
+        <div class="nav-icon">📋</div>
+        Activity
+    </a>
+    <a href="offers.html" class="nav-item">
+        <div class="nav-icon">🛍</div>
+        Offers
+    </a>
+</div>
+
+<script>
+    // Sample contacts database
+    const contacts = [
+        { name: "Benzekka Fatima", handle: "@fatima", email: "bourafatoumita@gmail.com", avatar: "T" },
+        { name: "John Doe", handle: "@johndoe", email: "john.doe@email.com", avatar: "J" },
+        { name: "Sarah Wilson", handle: "@sarahw", email: "sarah.wilson@gmail.com", avatar: "S" },
+        { name: "Mike Johnson", handle: "@mike_j", email: "mike.johnson@outlook.com", avatar: "M" },
+        { name: "Emily Chen", handle: "@emilyc", email: "emily.chen@yahoo.com", avatar: "E" },
+        { name: "David Brown", handle: "@davidb", email: "david.brown@hotmail.com", avatar: "D" }
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const defaultContact = document.getElementById('defaultContact');
+    const suggestedLabel = document.getElementById('suggestedLabel');
+    const noResults = document.getElementById('noResults');
+    const sendBtn = document.getElementById('sendBtn');
+    const requestBtn = document.getElementById('requestBtn');
+
+    let currentAction = 'send';
+
+    sendBtn.addEventListener('click', function() {
+        currentAction = 'send';
+        sendBtn.classList.add('active');
+        requestBtn.classList.remove('active');
+    });
+
+    requestBtn.addEventListener('click', function() {
+        currentAction = 'request';
+        requestBtn.classList.add('active');
+        sendBtn.classList.remove('active');
+    });
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+
+        if (query === '') {
+            searchResults.classList.remove('show');
+            defaultContact.style.display = 'flex';
+            suggestedLabel.textContent = 'Suggested';
+            noResults.style.display = 'none';
+        } else {
+            const filteredContacts = contacts.filter(contact =>
+                contact.name.toLowerCase().includes(query) ||
+                contact.handle.toLowerCase().includes(query) ||
+                contact.email.toLowerCase().includes(query)
+            );
+
+            defaultContact.style.display = 'none';
+
+            if (filteredContacts.length > 0) {
+                displaySearchResults(filteredContacts);
+                suggestedLabel.textContent = 'Search Results';
+                noResults.style.display = 'none';
+            } else {
+                searchResults.classList.remove('show');
+                suggestedLabel.textContent = 'Search Results';
+                noResults.style.display = 'block';
+            }
+        }
+    });
+
+    function displaySearchResults(contacts) {
+        searchResults.innerHTML = '';
+        contacts.forEach(contact => {
+            const contactDiv = document.createElement('div');
+            contactDiv.className = 'contact-item';
+            contactDiv.innerHTML = `
+                <div class="contact-avatar">${contact.avatar}</div>
+                <div class="contact-info">
+                    <div class="contact-name">${contact.name}</div>
+                    <div class="contact-handle">${contact.handle}</div>
+                </div>
+                <div class="info-icon">i</div>
+            `;
+            contactDiv.addEventListener('click', function() {
+                const contactWithAction = { ...contact, action: currentAction };
+                if (typeof(Storage) !== "undefined") {
+                    sessionStorage.setItem('selectedContact', JSON.stringify(contactWithAction));
+                }
+                window.location.href = 'confirm.html';
+            });
+            searchResults.appendChild(contactDiv);
+        });
+        searchResults.classList.add('show');
+    }
+
+    defaultContact.addEventListener('click', function() {
+        const defaultContactWithAction = { ...contacts[0], action: currentAction };
+        if (typeof(Storage) !== "undefined") {
+            sessionStorage.setItem('selectedContact', JSON.stringify(defaultContactWithAction));
+        }
+        window.location.href = 'confirm.html';
+    });
+</script>
+</body>
+</html>
