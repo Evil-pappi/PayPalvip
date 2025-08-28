@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -94,7 +95,7 @@
     <div class="message-section">
       <input type="text" class="message-input" placeholder="Add a message" id="messageInput">
     </div>
-    <button class="next-button" id="nextButton" disabled onclick="showReviewPopup()">Next</button>
+    <button class="next-button" id="nextButton" disabled onclick="redirectToSuccess()">Next</button>
     <div style="clear:both;"></div>
   </div>
 
@@ -184,9 +185,14 @@
       }
     }
 
+    function redirectToSuccess() {
+      window.location.href = 'success.html';
+    }
+
     function goBack(){ history.back(); }
 
     window.onload=function(){ loadContactInfo(); initializeCurrencyDropdown(); };
   </script>
+
 </body>
 </html>
